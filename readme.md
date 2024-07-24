@@ -147,7 +147,6 @@ As a guest, I want to join the app  so that I can start the registration process
 II. Applicant
 
 
-As an applicant, I want to log in the system so that I can register as a volunteer. (bỏ qua)  
 As an applicant, I would like to register to be a volunteer so that I can participate in volunteer activities.  
 As an applicant, I want to change some fields in the application form so that my information is up to date.  
 As an applicant, I would like to cancel my registration so that I can withdraw my application.  
