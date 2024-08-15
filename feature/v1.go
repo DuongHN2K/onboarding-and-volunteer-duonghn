@@ -30,6 +30,10 @@ import (
 	departmentTransport "github.com/cesc1802/onboarding-and-volunteer-service/feature/department/transport"
 	departmentUsecase "github.com/cesc1802/onboarding-and-volunteer-service/feature/department/usecase"
 
+	roleStorage "github.com/cesc1802/onboarding-and-volunteer-service/feature/role/storage"
+	roleTransport "github.com/cesc1802/onboarding-and-volunteer-service/feature/role/transport"
+	roleUsecase "github.com/cesc1802/onboarding-and-volunteer-service/feature/role/usecase"
+
 	"github.com/cesc1802/share-module/system"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -59,6 +63,7 @@ func RegisterHandlerV1(mono system.Service) {
 	volunteerRequestRepo := userStorage.NewVolunteerRequestRepository(mono.DB())
 	countryRepo := countryStorage.NewCountryRepository(mono.DB())
 	departmentRepo := departmentStorage.NewDepartmentRepository(mono.DB())
+	roleRepo := roleStorage.NewRoleRepository(mono.DB())
 
 	// Initialize usecase
 	authUseCase := authUsecase.NewUserUsecase(authRepo, secretKey)
@@ -70,6 +75,7 @@ func RegisterHandlerV1(mono system.Service) {
 	volunteerRequestUseCase := userUsecase.NewVolunteerRequestUsecase(volunteerRequestRepo)
 	countryUsecase := countryUsecase.NewCountryUsecase(countryRepo)
 	departmentUsecase := departmentUsecase.NewDepartmentUsecase(departmentRepo)
+	roleUsecase := roleUsecase.NewRoleUsecase(roleRepo)
 
 	// Initialize handler
 	authHandler := authTransport.NewAuthenticationHandler(authUseCase)
@@ -81,6 +87,7 @@ func RegisterHandlerV1(mono system.Service) {
 	volunteerRequestHandler := userTransport.NewVolunteerRequestHandler(volunteerRequestUseCase)
 	countryHandler := countryTransport.NewCountryHandler(countryUsecase)
 	departmentHandler := departmentTransport.NewDepartmentHandler(departmentUsecase)
+	roleHandler := roleTransport.NewRoleHandler(roleUsecase)
 
 	auth := v1.Group("/auth")
 	{
@@ -151,4 +158,11 @@ func RegisterHandlerV1(mono system.Service) {
 		department.GET("/:id", departmentHandler.GetDepartmentByID)
 	}
 
+	role := v1.Group("/role")
+	{
+		role.POST("/", roleHandler.CreateRole)
+		role.PUT("/:id", roleHandler.UpdateRole)
+		role.DELETE("/:id", roleHandler.DeleteRole)
+		role.GET("/:id", roleHandler.GetRoleByID)
+	}
 }
